@@ -1,0 +1,54 @@
+[package]
+name = "openshell-sandbox-proxy"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.94"
+description = "Discovery-driven TLS passthrough proxy for OpenShell sandbox applications"
+repository = "https://github.com/TaylorMutch/openshell-sandbox-proxy"
+publish = false
+
+[dependencies]
+openshell-core = { git = "https://github.com/NVIDIA/OpenShell.git", rev = "78300dd6424710051654b492a2b0941801aaf07a" }
+openshell-sdk = { git = "https://github.com/NVIDIA/OpenShell.git", rev = "78300dd6424710051654b492a2b0941801aaf07a" }
+axum = { version = "0.8", features = ["ws"] }
+clap = { version = "4.5", features = ["derive", "env"] }
+rustls = { version = "0.23", default-features = false, features = ["std", "logging", "tls12"] }
+tokio = { version = "1.53.3", features = ["full"] }
+tonic = "0.14"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+url = "2"
+
+[dev-dependencies]
+tokio = { version = "1.53.3", features = ["test-util"] }
+openshell-crypto = { git = "https://github.com/NVIDIA/OpenShell.git", rev = "78300dd6424710051654b492a2b0941801aaf07a" }
+
+[lints.rust]
+unsafe_code = "warn"
+rust_2018_idioms = { level = "warn", priority = -1 }
+trivial_casts = "warn"
+trivial_numeric_casts = "warn"
+unused_lifetimes = "warn"
+unused_qualifications = "warn"
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+nursery = { level = "warn", priority = -1 }
+
+# Allow certain pedantic lints that are too noisy
+module_name_repetitions = "allow"
+must_use_candidate = "allow"
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+
+# Allow noisy nursery lints
+significant_drop_tightening = "allow"  # Often gives incorrect suggestions
+missing_const_for_fn = "allow"  # Too noisy for async code patterns
+
+# Allow noisy pedantic lints
+too_many_lines = "allow"  # Function length limits are subjective
+needless_pass_by_value = "allow"  # Common pattern in async handlers
+ref_option = "allow"  # Common pattern for optional references
+missing_fields_in_debug = "allow"  # Manual Debug impls often intentionally omit fields
+
